@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: product_explorer_db
+      POSTGRES_USER: product_explorer_user
+      POSTGRES_PASSWORD: explorer
+    ports:
+      - "5432:5432"
+    container_name: pokemon-product-db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db_config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pokemon-product-net
+    
+  frontend:
+    build: ./product-explorer
+    container_name: product-explorer
+    ports:
+      - "4200:80"
+    networks:
+      - pokemon-product-net
+
+  backend:
+    build: ./backend
+    container_name: product-explorer-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DB_NAME: product_explorer_db
+      DB_USER: product_explorer_user
+      DB_PASSWORD: explorer
+      DB_HOST: db
+    networks:
+      - pokemon-product-net
+
+  importer:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: /bin/sh -c "npm install pg && node scripts/populate_db.js"
+    depends_on:
+      - db
+    environment:
+      DB_NAME: product_explorer_db
+      DB_USER: product_explorer_user
+      DB_PASSWORD: explorer
+      DB_HOST: db
+    networks:
+      - pokemon-product-net
+
+volumes:
+  db_data:
+
+networks:
+  pokemon-product-net:
