@@ -56,7 +56,7 @@ npm install
 npm start
 ```
 
-##### b. Run backend
+##### c. Run backend
 
 1. Create environment
 ```bash
