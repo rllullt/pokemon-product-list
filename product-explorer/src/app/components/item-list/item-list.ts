@@ -1,7 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { PokemonService, PokemonItem } from '../../services/pokemon-product.service';
+import { Loader } from '../loader/loader';
+import { AsyncPipe } from '@angular/common';
 
 export type inventoryItem = {
   id: number;
@@ -15,45 +22,27 @@ export type inventoryItem = {
 
 @Component({
   selector: 'app-item-list',
-  imports: [MatListModule, MatIconModule],
+  imports: [MatListModule, MatIconModule, Loader, AsyncPipe],
   templateUrl: './item-list.html',
   styleUrl: './item-list.scss'
 })
-export class ItemList {
-  constructor(private router: Router) { }
+export class ItemList implements OnInit {
+  // Observables para conectar el template con el servicio
+  public items$: Observable<PokemonItem[]>;
+  public loading$: Observable<boolean>;
+  
+  constructor(private router: Router, private pokemonService: PokemonService) {
+    // Asignamos los observables del servicio a las propiedades del componente
+    this.items$ = this.pokemonService.items$;
+    this.loading$ = this.pokemonService.loading$;
+  }
 
-  items: inventoryItem[] = [
-    {
-      id: 1,
-      name: 'Bulbasaur',
-      types: 'grass,poison',
-      abilities: 'overgrow,chlorophyll',
-      weight: 69,
-      height: 7,
-      url: 'https://pokeapi.co/api/v2/pokemon/1'
-    },
-    {
-      id: 2,
-      name: 'Ivysaur',
-      types: 'grass,poison',
-      abilities: 'overgrow,chlorophyll',
-      weight: 130,
-      height: 10,
-      url: 'https://pokeapi.co/api/v2/pokemon/2'
-    },
-    {
-      id: 3,
-      name: 'Venusaur',
-      types: 'grass,poison',
-      abilities: 'overgrow,chlorophyll',
-      weight: 1000,
-      height: 20,
-      url: 'https://pokeapi.co/api/v2/pokemon/3'
-    }
-  ];
-  // items: inventoryItem[] = [];
+  ngOnInit(): void {
+    // Al iniciar el componente, pedimos al servicio que cargue los items
+    this.pokemonService.loadItems();
+  }
 
   navigateToItem(itemId: number): void {
-      this.router.navigate(['/item', itemId]);
+    this.router.navigate(['/item', itemId]);
   }
 }
