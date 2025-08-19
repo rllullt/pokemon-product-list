@@ -18,6 +18,22 @@ cd pokemon-product-list/
 # docker compose up
 ```
 
+If there exist any problem that may be associated with caché, it is recommended to run:
+
+```bash
+# docker compose down --volumes --rmi all
+# docker compose build --no-cache
+# docker compose up
+```
+
+These commands remove the containers, networks, volumes, and images associated with the Compose project before building and starting fresh.
+
+##### Documented problem when running `docker compose up`
+
+Once there was a problem of `rror: connect ECONNREFUSED`, that the populate_db script detected the url to be the url of the machine, instead of “localhost” or “127.0.0.1”.
+It was fixed by running the command `docker compose up` again, when everything worked fine.
+
+
 #### 2.b Run for development
 
 It is recommended to create a special environment for running the apps.
