@@ -2,12 +2,8 @@
   <h2>He aquí: pokemones</h2>
   <mat-list>
     @for (item of items; track item) {
-      <mat-list-item>
+      <mat-list-item (click)="navigateToItem(item.id)" (keydown.enter)="navigateToItem(item.id)" tabindex="0">
         <span matListItemTitle>{{ item.name }}</span>
-        <span matListItemLine>Types ({{ item.types.split(',').length }}): {{ item.types }}</span>
-        <span matListItemLine>Abilities ({{ item.abilities.split(',').length }}): {{ item.abilities }}</span>
-        <span matListItemLine>Weight: {{ item.weight }} kg.</span>
-        <span matListItemLine>Height: {{ item.height }} cm.</span>
         <span matListItemLine>Pokedex URL: <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.url }}</a></span>
       </mat-list-item>
       <br>
@@ -17,3 +13,4 @@
         </mat-list-item>
     }
   </mat-list>
+</div>

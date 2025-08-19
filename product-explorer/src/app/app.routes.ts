@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ItemList } from './components/item-list/item-list';
-// import { ItemDetailComponent } from './components/item-detail.component';
+import { ItemDetail } from './components/item-detail/item-detail';
 import { LandingPage } from './components/landing-page/landing-page';
 
 export const routes: Routes = [
@@ -12,8 +12,8 @@ export const routes: Routes = [
         path: 'items',
         component: ItemList
     },
-    // {
-    //     path: 'items/:id',
-    //     component: ItemDetailComponent
-    // },
+    {
+        path: 'item/:id',
+        component: ItemDetail
+    },
 ];

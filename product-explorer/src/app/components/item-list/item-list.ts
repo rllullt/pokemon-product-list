@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 
-type inventoryItem = {
+export type inventoryItem = {
   id: number;
   name: string;
   types: string;
@@ -19,6 +20,8 @@ type inventoryItem = {
   styleUrl: './item-list.scss'
 })
 export class ItemList {
+  constructor(private router: Router) { }
+
   items: inventoryItem[] = [
     {
       id: 1,
@@ -49,4 +52,8 @@ export class ItemList {
     }
   ];
   // items: inventoryItem[] = [];
+
+  navigateToItem(itemId: number): void {
+      this.router.navigate(['/item', itemId]);
+  }
 }
